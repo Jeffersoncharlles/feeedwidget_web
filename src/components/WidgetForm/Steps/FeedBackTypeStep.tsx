@@ -39,3 +39,6 @@ export const FeedBackTypeStep = ({ onFeedBackTypeChange }: IFeedBackTypeStep) =>
         </>
     );
 }
+
+//Object.entries faz ele vai retornar => [ ['BUG', {....}], ['IDEA', {....}]],['OTHER', {....}]] ]
+// item[0] 'BUG' item[1] '{....}'

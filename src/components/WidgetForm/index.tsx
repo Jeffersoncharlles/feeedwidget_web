@@ -1,11 +1,12 @@
-import { CloseButton } from "../CloseButton";
+import { useState } from "react";
 
 import bugImageUrl from '../../assets/bug.svg'
 import ideaImageUrl from '../../assets/idea.svg'
 import otherImageUrl from '../../assets/thought.svg'
-import { useState } from "react";
-import { FeedBackTypeStep } from "./Steps/FeedBacktypeStep";
-import { FeedBackContentStep } from "./Steps/FeedBackCOntentStep";
+
+import { FeedBackTypeStep } from "./Steps/FeedBackTypeStep";
+import { FeedBackContentStep } from "./Steps/FeedBackContentStep";
+import { FeedBackSuccessStep } from "./Steps/FeedBackSuccessStep";
 
 export const feedBackTypes = {
     BUG: {
@@ -37,6 +38,12 @@ export type FeedBackType = keyof typeof feedBackTypes
 
 export const WidgetForm = () => {
     const [feedBackType, setFeedBackType] = useState<FeedBackType | null>(null)
+    const [feedBackSend, setFeedBackSend] = useState(false)
+
+    const handleRestartFeedback = () => {
+        setFeedBackSend(false)
+        setFeedBackType(null)
+    }
 
     return (
         <div className="
@@ -50,12 +57,23 @@ export const WidgetForm = () => {
                 w-[calc(100vw-2rem)]
                 md:w-auto
         ">
-            {!feedBackType ? (
-                <FeedBackTypeStep onFeedBackTypeChange={setFeedBackType} />
+            {feedBackSend ? (
+                <FeedBackSuccessStep onReset={handleRestartFeedback} />
             ) : (
-                <FeedBackContentStep feedBackType={feedBackType} />
-            )
-            }
+                <>
+                    {!feedBackType ? (
+                        <FeedBackTypeStep onFeedBackTypeChange={setFeedBackType} />
+                    ) : (
+                        <FeedBackContentStep
+                            feedBackType={feedBackType}
+                            onReset={handleRestartFeedback}
+                            onFeedBackSend={() => setFeedBackSend(true)}
+                        />
+                    )
+                    }
+                </>
+            )}
+
             <footer className="text-xs text-neutral-400">
                 Feito com ♥ pela <a className="underline underline-offset-2" href="https://rocketseat.com.br">Rocketseat</a>
             </footer>
@@ -68,5 +86,3 @@ export const WidgetForm = () => {
 
 //md: e criar responsividade
 
-//Object.entries faz ele vai retornar => [ ['BUG', {....}], ['IDEA', {....}]],['OTHER', {....}]] ]
-// item[0] 'BUG' item[1] '{....}'
