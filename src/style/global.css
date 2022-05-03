@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    @apply bg-[#09090A] text-zinc-100
+}
+
+/* colchetes vai colocar a cor que vc quizzer apply vc aplica nas nele direto */
