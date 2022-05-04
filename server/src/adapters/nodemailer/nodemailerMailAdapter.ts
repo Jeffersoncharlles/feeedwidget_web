@@ -12,8 +12,6 @@ const transport = nodemailer.createTransport({
 
 export class NodemailerMailAdapter implements MailAdapter {
     async sendMail({ subject, body }: ISendMaid) {
-
-
         await transport.sendMail({
             from: 'Equipe feedGet <oi@feedget.com>',
             to: "Jefferson Charlles <contato@jefferdeveloper.com>",
