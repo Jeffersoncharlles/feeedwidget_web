@@ -1,7 +1,9 @@
 import { ArrowLeft, Camera } from "phosphor-react";
 import { useState } from "react";
 import { FeedBackType, feedBackTypes } from "..";
+import { api } from "../../../service/api";
 import { CloseButton } from "../../CloseButton";
+import { Loading } from "../../Loading";
 import { ScreenShotButton } from "../ScreenShotButton";
 
 interface IFeedBackContent {
@@ -15,12 +17,19 @@ interface IFeedBackContent {
 export const FeedBackContentStep = ({ feedBackType, onReset, onFeedBackSend }: IFeedBackContent) => {
     const [screeShot, setScreenShot] = useState<string | null>(null)
     const [comment, setComment] = useState('')
+    const [isSendFeedback, setIsSendFeedback] = useState(false)
 
     const feedBackTypesInfos = feedBackTypes[feedBackType]; //pegar apenas o que a pessoa escolheu
 
-    const handleSubmitFeedBack = (e: React.FormEvent) => {
+    const handleSubmitFeedBack = async (e: React.FormEvent) => {
         e.preventDefault()
-
+        setIsSendFeedback(true)
+        await api.post('feedbacks', {
+            type: feedBackType,
+            comment,
+            screenshot: screeShot
+        })
+        setIsSendFeedback(false)
         onFeedBackSend();
     }
 
@@ -69,7 +78,7 @@ export const FeedBackContentStep = ({ feedBackType, onReset, onFeedBackSend }: I
 
                     <button
                         type="submit"
-                        disabled={comment.length === 0}
+                        disabled={comment.length === 0 || isSendFeedback}
                         className="
                             p-2
                             bg-brand-500
@@ -91,7 +100,7 @@ export const FeedBackContentStep = ({ feedBackType, onReset, onFeedBackSend }: I
                             disabled:hover:bg-brand-500
                         "
                     >
-                        Enviar FeedBack
+                        {isSendFeedback ? <Loading /> : `Enviar FeedBack`}
                     </button>
                 </footer>
             </form>
