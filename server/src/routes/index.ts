@@ -11,8 +11,13 @@ const Routes = Router()
 
 Routes.post('/feedbacks', async (req, res) => {
     const { type, comment, screenshot } = req.body
-    await submitFeedBackService.execute({ type, comment, screenshot })
-    return res.status(201).send()
+    try {
+        await submitFeedBackService.execute({ type, comment, screenshot })
+        return res.status(201).send()
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send()
+    }
 })
 
 
